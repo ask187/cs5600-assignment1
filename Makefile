@@ -1,34 +1,42 @@
-# ===== Ubuntu / Linux Makefile =====
+#
+#   Aravind Santhosh Kumar  - CS5600 - Assignment 1 - Program in C
+#
+#  	Makefile to compile the project
+#
+#
 
-# Compiler & flags
-CC      ?= gcc
-CFLAGS  ?= -Wall -Wextra -std=c11 -O2
-LDFLAGS ?=
-LDLIBS  ?= -lm            # Linux needs -lm for math functions
-
-# Targets & sources
+# compiler variable
+CC      = gcc
+# variable for the math lib
+LIB  ?= -lm
+# target
 TARGET  := CS5600.LearnC
-MAIN    := AravindsanthoshkumarL5600.LearnC
-SRCS    := $(MAIN).c mpg2km.c
+# main file 
+MAIN    := AravindsanthoshkumarL5600.LearnC.c
+# all .c files
+SRCS    := $(MAIN) mpg2km.c
+# all objects ( from the .c files )
 OBJS    := $(SRCS:.c=.o)
-DEPS    := $(SRCS:.c=.d)
+# header files
+HEADR   := mpg2km.h
 
 .PHONY: all run clean
 
 all: $(TARGET)
 
+# target compile commands
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+	$(CC) -o $@ $^ $(LIB)
 
-# Compile C to .o and generate dependency files (.d)
+
+# Compile .o for each .c file 
 %.o: %.c
-	$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
+	$(CC) -c $< -o $@ 
 
-# Include auto-generated header dependencies
--include $(DEPS)
-
+# run command for the target
 run: $(TARGET)
 	./$(TARGET)
 
+# clean and remove all objetcs and target 
 clean:
-	rm -f $(OBJS) $(DEPS) $(TARGET)
+	rm -f $(OBJS) $(TARGET)
